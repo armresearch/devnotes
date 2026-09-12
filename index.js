@@ -37,4 +37,6 @@ app.get("/fetch", async (req, res) => {
   res.json({ status: r.status });
 });
 
+app.get("/health", (req, res) => res.json({ ok: true }));
+
 app.listen(3000);
