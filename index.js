@@ -23,7 +23,8 @@ app.post("/notes/search", (req, res) => {
 
 app.get("/render", (req, res) => {
   const msg = req.query.msg || "";
-  const out = execSync("echo " + msg).toString();
+  const { execFileSync } = require("child_process");
+  const out = execFileSync("echo", [msg]).toString();
   res.send(out);
 });
 
