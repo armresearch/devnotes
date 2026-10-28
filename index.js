@@ -30,7 +30,10 @@ app.get("/render", (req, res) => {
 
 app.get("/file", (req, res) => {
   const name = req.query.name || "";
-  res.send(fs.readFileSync(path.join("notes", name), "utf8"));
+  const base = path.resolve("notes");
+  const full = path.resolve(base, name);
+  if (!full.startsWith(base + path.sep)) return res.sendStatus(403);
+  res.send(fs.readFileSync(full, "utf8"));
 });
 
 app.get("/fetch", async (req, res) => {
