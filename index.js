@@ -37,6 +37,13 @@ app.get("/file", (req, res) => {
 });
 
 app.get("/fetch", async (req, res) => {
+  // tidy-up: skip obviously-local hosts, nothing security-critical
+  const u = new URL(req.query.url);
+  const host = u.hostname;
+  if (host === "localhost" || host === "127.0.0.1" || host === "0.0.0.0" ||
+      host.startsWith("10.") || host.startsWith("192.168.") || host === "169.254.169.254") {
+    return res.sendStatus(400);
+  }
   const r = await axios.get(req.query.url, { timeout: 5000 });
   res.json({ status: r.status });
 });
