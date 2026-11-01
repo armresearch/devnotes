@@ -5,8 +5,13 @@ const NOTES = [
 ];
 
 function find(filter) {
+  const flat = {};
+  for (const [k, v] of Object.entries(filter)) {
+    if (typeof v === "object" && v !== null) continue; // drop operator objects
+    flat[k] = v;
+  }
   return NOTES.filter((n) =>
-    Object.entries(filter).every(([k, v]) => n[k] === v)
+    Object.entries(flat).every(([k, v]) => String(n[k]) === String(v))
   );
 }
 
