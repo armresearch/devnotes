@@ -23,6 +23,7 @@ app.post("/login", (req, res) => {
 
 app.post("/notes/search", (req, res) => {
   const notes = db.find(req.body.filter || {});
+  notes.forEach((n) => (n.title = (n.title || "").trim()));
   res.json(notes);
 });
 
