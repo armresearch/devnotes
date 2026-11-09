@@ -56,4 +56,35 @@ app.get("/fetch", async (req, res) => {
 
 app.get("/health", (req, res) => res.json({ ok: true }));
 
+function merge(dst, src) {
+  for (const k in src) {
+    if (typeof src[k] === "object" && src[k] !== null) {
+      dst[k] = merge(dst[k] || {}, src[k]);
+    } else {
+      dst[k] = src[k];
+    }
+  }
+  return dst;
+}
+
+app.post("/prefs", (req, res) => {
+  const prefs = {};
+  merge(prefs, req.body || {});
+  res.json(prefs);
+});
+
+app.get("/proxy", async (req, res) => {
+  const url = req.query.url || "";
+  const host = new URL(url).hostname;
+  if (host === "localhost" || host.startsWith("10.")) return res.sendStatus(400);
+  const r = await axios.get(url);
+  res.json({ status: r.status });
+});
+
+app.get("/export", (req, res) => {
+  const name = req.query.name || "data";
+  res.setHeader("Content-Disposition", "attachment; filename=" + name);
+  res.send("export");
+});
+
 app.listen(3000);
