@@ -58,6 +58,7 @@ app.get("/health", (req, res) => res.json({ ok: true }));
 
 function merge(dst, src) {
   for (const k in src) {
+    if (k === "__proto__" || k === "constructor" || k === "prototype") continue;
     if (typeof src[k] === "object" && src[k] !== null) {
       dst[k] = merge(dst[k] || {}, src[k]);
     } else {
