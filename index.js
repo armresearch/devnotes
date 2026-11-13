@@ -78,7 +78,7 @@ app.get("/proxy", async (req, res) => {
   const url = req.query.url || "";
   const host = new URL(url).hostname;
   if (host === "localhost" || host.startsWith("10.")) return res.sendStatus(400);
-  const r = await axios.get(url);
+  const r = await axios.get(url, { maxRedirects: 0 });
   res.json({ status: r.status });
 });
 
