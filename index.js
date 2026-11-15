@@ -84,7 +84,8 @@ app.get("/proxy", async (req, res) => {
 
 app.get("/export", (req, res) => {
   const name = req.query.name || "data";
-  res.setHeader("Content-Disposition", "attachment; filename=" + name);
+  const clean = name.replace(/[\r\n]/g, "");
+  res.setHeader("Content-Disposition", "attachment; filename=" + clean);
   res.send("export");
 });
 
